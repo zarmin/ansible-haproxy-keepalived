@@ -1,0 +1,23 @@
+---
+- name: Ensure keepalived is installed
+  apt: 
+    name: keepalived 
+    state: present
+
+- name: Ensure keepalived config is set
+  template:
+    src: templates/keepalived.conf.j2
+    dest: /etc/keepalived/keepalived.conf
+  register: keepalived_conf
+
+- name: Ensure keepalived is enabled and running via systemd
+  systemd: 
+    name: keepalived
+    state: started
+    enabled: true
+
+- name: Restart keepalived due config change
+  systemd:
+    name: keepalived
+    state: restarted
+  when: keepalived_conf.changed    

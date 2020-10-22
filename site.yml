@@ -1,0 +1,17 @@
+---
+
+- hosts: haproxy_keepalived
+  remote_user: user
+  become: true
+
+  roles:
+    - haproxy
+    - keepalived
+
+  vars:
+    keepalived_pass: SUBsOrhERUloVeRsEUm
+    keepalived_interface: ens33
+    keepalived_virtualip: 192.168.236.251
+    keepalived_virtual_router_id: 101
+    haproxy_frontend_bind: "*:80"
+    haproxy_backend_node: 127.0.0.1:8080

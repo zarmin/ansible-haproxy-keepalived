@@ -1,0 +1,23 @@
+---
+- name: Ensure haproxy and hatop is installed
+  apt: 
+    name: ['haproxy', 'hatop'] 
+    state: present
+
+- name: Ensure haproxy config is set
+  template:
+    src: templates/haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+  register: haproxy_conf
+
+- name: Ensure haproxy is enabled and running via systemd
+  systemd: 
+    name: haproxy
+    state: started
+    enabled: true
+
+- name: Restart haproxy due config change
+  systemd:
+    name: haproxy
+    state: restarted
+  when: haproxy_conf.changed

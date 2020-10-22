@@ -1,0 +1,21 @@
+! Configuration File for keepalived
+! managed by ansible
+
+global_defs {
+}
+
+vrrp_instance VI_1 {
+    state MASTER
+    interface {{ keepalived_interface }}
+    virtual_router_id {{ keepalived_virtual_router_id }}
+    priority {{ keepalived_priority }}
+    advert_int 1
+    authentication {
+        auth_type PASS
+        auth_pass {{ keepalived_pass }}
+    }
+    virtual_ipaddress {
+        {{ keepalived_virtualip }} dev {{ keepalived_interface }}
+    }
+}
+
